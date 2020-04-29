@@ -1,0 +1,39 @@
+#!/bin/bash
+while getopts ":R:d:s:h:" opt; do
+  case $opt in
+    R) arg1="$OPTARG"
+    ;;
+    d) arg2="$OPTARG"
+    ;;
+    s) arg3="$OPTARG"
+    ;;
+    h) arg4="$OPTARG"
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+if [ -n "$arg1" ]; then
+     for i in ` find "$arg1" -name "$arg2" -exec cat {} \; | awk {'print $5'} `; do
+     if [[ "$i" > "$arg3" ]]; then
+         echo "$i"
+     else
+         echo "no" >%2
+     fi
+ done
+elif
+    [ "$1" == "-h" ]; then
+    echo "Kullanım: [-R  ] ile taranacak dizinin yolu belirtilir.Alt dosyalardada tarama yapar."
+    echo "          [-d  ] ile desen belirtilir"
+    echo "          [-s  ] ile sayı belirtilir"
+    echo "Exp: Bash skript -R . -d 'a*.txt' -s 9999.50"
+else
+     for i in ` find . -maxdepth 1 -name "$arg2" -exec cat {} \; | awk {'print $5'} `; do
+     if [[ "$i" > "$arg3" ]]; then
+         echo "$i"
+     else
+         echo "no" >%2
+     fi
+ done
+fi
+#find . -maxdepth 1 -name "$arg2" -exec cat {} \; | awk {'print $5'}  
